@@ -1,0 +1,10 @@
+.skip {
+  padding: 4px;
+  position: absolute;
+  transform: translateY(-100%);
+  transition: transform 0.3s;
+
+  &:focus {
+    transform: translateY(0%);
+  }
+}
