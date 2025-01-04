@@ -1,17 +1,20 @@
+'use client'
+
 import axios from 'axios';
+import getAccessToken from './auth';
 
 export type TSCat = {
   id: number,
   url: string,
   name: string,
   description: string,
-  photos: [{
+  photos: {
     full: string,
-  }?],
-  videos: [{
+  }[],
+  videos: {
     embed: string,
-  }?],
-  tags: [string?],
+  }[],
+  tags: string[],
 }
 
 type animalsResponse = {
@@ -30,22 +33,30 @@ const catDefault: TSCat = {
   tags: [],
 };
 
-const getCat = () => {
-  axios.get('https://api.petfinder.com/v2/animals', {
-    params: {
-      limit: 1,
-      special_needs: 1,
-      status: 'adoptable',
-      type: 'Cat',
-    }
-  })
-  .then(function (response: animalsResponse) {
-    return response.data.animals[0];
-  })
-  .catch(function (error) {
+const getCat = (): TSCat => {
+  let cat = catDefault;
+  const accessToken = getAccessToken();
+
+  try {
+    axios.get('https://api.petfinder.com/v2/animals', {
+      params: {
+        limit: 1,
+        special_needs: 1,
+        status: 'adoptable',
+        type: 'Cat',
+      },
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    })
+    .then(response => {
+      cat = response.data.animals[0];
+    });
+  } catch (error) {
     console.log(error);
-    return catDefault;
-  });
+  }
+
+  return cat;
 };
 
 export default getCat;
