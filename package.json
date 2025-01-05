@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev2": "next dev -p 3400 & local-ssl-proxy --key cat-of-the-day.com-key.pem --cert cat-of-the-day.com.pem --source 443 --target 3400",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

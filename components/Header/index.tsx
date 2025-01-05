@@ -5,7 +5,7 @@ import logo from './cat-of-the-day-logo.png';
 const Header = () => (
   <header className={styles.header}>
     <div id="logo">
-      <Image src={logo} alt="logo" />
+      <Image src={logo} alt="logo" priority />
     </div>
     <h1 id="site-title">Cat Of The Day</h1>
   </header>

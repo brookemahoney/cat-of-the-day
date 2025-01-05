@@ -1,21 +1,34 @@
 'use client'
-import Image from 'next/image';
+
 import Link from 'next/link';
-import type { TSCat } from '@/ducks/cats';
-import getCat from '@/ducks/cats';
+import renewCat, { type TSCat, catDefault } from '@/ducks/cats';
 import styles from './index.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import renewAccessToken from '@/ducks/auth';
 
 const Cat = () => {
-  const cat = getCat();
+  const [accessToken, setAccessToken] = useState('');
+  const [cat, setCat] = useState(catDefault);
+
+  useEffect(() => {
+    if (accessToken) {
+      renewCat(accessToken, setCat);
+    } else {
+      renewAccessToken(setAccessToken);
+    }
+  }, [accessToken]);
+
   return (
     <section id="cat">
       <h2>
         <Link href={cat.url}>{cat.name}</Link>
       </h2>
       {cat.photos.map(photo => (
-        <div className={styles.photoWrapper}>
-          <Image src={photo.full} alt={cat.name} />
+        <div className={styles.photoWrapper} key={photo.full}>
+          <img
+            alt={cat.name}
+            src={photo.full}
+            />
         </div>
       ))}
     </section>

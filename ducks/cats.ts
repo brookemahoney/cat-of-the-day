@@ -1,7 +1,9 @@
-'use client'
-
 import axios from 'axios';
 import getAccessToken from './auth';
+import {
+  type Dispatch,
+  SetStateAction
+} from 'react';
 
 export type TSCat = {
   id: number,
@@ -23,7 +25,7 @@ type animalsResponse = {
   },
 };
 
-const catDefault: TSCat = {
+export const catDefault: TSCat = {
   id: 0,
   url: '',
   name: '',
@@ -33,12 +35,8 @@ const catDefault: TSCat = {
   tags: [],
 };
 
-const getCat = (): TSCat => {
-  let cat = catDefault;
-  const accessToken = getAccessToken();
-
-  try {
-    axios.get('https://api.petfinder.com/v2/animals', {
+const renewCat = (accessToken: string, setCat: Dispatch<SetStateAction<TSCat>>) => {
+  axios.get('https://api.petfinder.com/v2/animals', {
       params: {
         limit: 1,
         special_needs: 1,
@@ -50,13 +48,11 @@ const getCat = (): TSCat => {
       }
     })
     .then(response => {
-      cat = response.data.animals[0];
+      setCat(response.data.animals[0]);
+    })
+    .catch(error => {
+      console.log(error);
     });
-  } catch (error) {
-    console.log(error);
-  }
-
-  return cat;
 };
 
-export default getCat;
+export default renewCat;
