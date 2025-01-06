@@ -6,17 +6,29 @@ import {
 } from 'react';
 
 export type TSCat = {
-  id: number,
-  url: string,
-  name: string,
+  contact: {
+    email: string | null,
+    phone: string | null,
+      address: {
+      address1: string | null,
+      address2: string | null,
+      city: string | null,
+      state: string | null,
+      postcode: string | null,
+      country: string | null,
+    }
+  },
   description: string,
+  id: number,
+  name: string,
   photos: {
+    small: string,
+    medium: string,
+    large: string,
     full: string,
   }[],
-  videos: {
-    embed: string,
-  }[],
   tags: string[],
+  url: string,
 }
 
 type animalsResponse = {
@@ -26,13 +38,24 @@ type animalsResponse = {
 };
 
 export const catDefault: TSCat = {
-  id: 0,
-  url: '',
-  name: '',
+  contact: {
+    email: '',
+    phone: '',
+      address: {
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      postcode: '',
+      country: '',
+    }
+  },
   description: '',
+  id: 0,
+  name: '',
   photos: [],
-  videos: [],
   tags: [],
+  url: '',
 };
 
 const renewCat = (accessToken: string, setCat: Dispatch<SetStateAction<TSCat>>) => {
