@@ -10,6 +10,8 @@ const Cat = () => {
   const [accessToken, setAccessToken] = useState('');
   const [cat, setCat] = useState(catDefault);
   const [loading, setLoading] = useState(true);
+  const [tagsDescription, setTagsDescription] = useState('');
+  const [location, setLocation] = useState('');
 
   useEffect(() => {
     if (accessToken) {
@@ -22,6 +24,12 @@ const Cat = () => {
   useEffect(() => {
     if (accessToken) {
       setLoading(false);
+    }
+    if (cat.tags.length) {
+      setTagsDescription(cat.tags.join(', '));
+    }
+    if (cat.contact.address.city || cat.contact.address.state) {
+      setLocation([cat.contact.address.city, cat.contact.address.state].filter(location => location).join(', '));
     }
   }, [cat]);
 
@@ -38,10 +46,17 @@ const Cat = () => {
           <h3>
             <Link href={cat.url}>Adoptable!</Link>
           </h3>
-          {cat.description && (
+          {(cat.description || tagsDescription) && (
             <div className={styles.description}>
-              <h3>Description</h3>
-              <p>{cat.description}</p>
+              {cat.description && (
+                <p>{cat.description}</p>
+              )}
+              {tagsDescription && (
+                <p>{tagsDescription}</p>
+              )}
+              {location && (
+                <p>{location}</p>
+              )}
             </div>
           )}
           {cat.photos.map(photo => (
